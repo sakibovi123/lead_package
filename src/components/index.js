@@ -5,13 +5,14 @@ function LeadForm(){
     const navigate = new useNavigate()
     // sending data to zapier
     let sendLeadToZapier = async (e) => {
+        e.preventDefault()
         let firstName = e.target.first_name.value
         let lastName = e.target.last_name.value
         let phone = e.target.phone.value
         let email = e.target.email.value
         let zipCode = e.target.zip_code.value
 
-        if( phone.length < 10 && phone.length > 10 ){
+        // sending response to zapier
             let response = await fetch("", {
                 method: "POST",
                 body: JSON.stringify({
@@ -28,23 +29,6 @@ function LeadForm(){
                 .then(result => result.json())
                 .catch(error => console.log(error))
 
-            // navigate to somewhere
-            console.log(response.body)
-            navigate()
-        }
-        else{
-            // show error here
-        }
-
-    }
-
-    let sendLeadToSheets = async (e) => {
-        let firstName = e.target.first_name.value
-        let lastName = e.target.last_name.value
-        let phone = e.target.phone.value
-        let email = e.target.email.value
-        let zipCode = e.target.zip_code.value
-        if( phone.length < 10 && phone.length > 10 ){
             let responseToSheets = await fetch("", {
                 method: "POST",
                 body: JSON.stringify({
@@ -61,14 +45,14 @@ function LeadForm(){
                 .then(output => output.json())
                 .catch(error => console.log(error))
             console.log(responseToSheets.body)
+
             // navigate to somewhere
+            console.log(response.body)
             navigate()
-        }
-        else{
-            // show error here
-        }
+
 
     }
+
 
     return (
         <>
@@ -79,7 +63,7 @@ function LeadForm(){
                 <label htmlFor="">Last Name</label><br/>
                 <input type="text" name="last_name" placeholder="Enter Last Name"/><br/>
                 <label htmlFor="">Phone Number</label><br/>
-                <input type="number" maxLength="10" name="phone" placholder="E:G 1234567892"/><br/>
+                <input type="number" maxLength="10" minLength="10" name="phone" placholder="E:G 1234567892"/><br/>
                 <label htmlFor="">Email</label><br/>
                 <input type="email" name="email" placholder="Enter email.."/><br/>
                 <label htmlFor="">Zip Code</label><br/>
