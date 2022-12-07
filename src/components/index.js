@@ -2,7 +2,7 @@ import React from 'react'
 import {useNavigate} from "react-router-dom";
 
 function LeadForm(){
-    let navigate = new useNavigate()
+    const navigate = new useNavigate()
     // sending data to zapier
     let sendLeadToZapier = async (e) => {
         let firstName = e.target.first_name.value
@@ -13,13 +13,17 @@ function LeadForm(){
 
         if( phone.length < 10 && phone.length > 10 ){
             let response = await fetch("", {
-                "lp_campaign_id": "",
-                "lp_campaign_key": "",
-                "first_name": firstName,
-                "last_name": lastName,
-                "phone": phone,
-                "email": email,
-                "zip_code": zipCode,
+                method: "POST",
+                body: JSON.stringify({
+                    "lp_campaign_id": "",
+                    "lp_campaign_key": "",
+                    "first_name": firstName,
+                    "last_name": lastName,
+                    "phone": phone,
+                    "email": email,
+                    "zip_code": zipCode,
+                })
+                // "lp_test": 1,
             })
                 .then(result => result.json())
                 .catch(error => console.log(error))
@@ -42,13 +46,17 @@ function LeadForm(){
         let zipCode = e.target.zip_code.value
         if( phone.length < 10 && phone.length > 10 ){
             let responseToSheets = await fetch("", {
-                "lp_campaign_id": "",
-                "lp_campaign_key": "",
-                "first_name": firstName,
-                "last_name": lastName,
-                "phone": phone,
-                "email": email,
-                "zip_code": zipCode,
+                method: "POST",
+                body: JSON.stringify({
+                    "lp_campaign_id": "",
+                    "lp_campaign_key": "",
+                    "first_name": firstName,
+                    "last_name": lastName,
+                    "phone": phone,
+                    "email": email,
+                    "zip_code": zipCode,
+                })
+                // "lp_test": 1,
             })
                 .then(output => output.json())
                 .catch(error => console.log(error))
