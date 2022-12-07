@@ -9,18 +9,23 @@ function LeadForm(){
         let lastName = e.target.last_name.value
         let phone = e.target.phone.value
         let email = e.target.email.value
+        let zipCode = e.target.zip_code.value
 
         if( phone.length < 10 && phone.length > 10 ){
             let response = await fetch("", {
+                "lp_campaign_id": "",
+                "lp_campaign_key": "",
                 "first_name": firstName,
                 "last_name": lastName,
                 "phone": phone,
-                "email": email
+                "email": email,
+                "zip_code": zipCode,
             })
                 .then(result => result.json())
                 .catch(error => console.log(error))
 
             // navigate to somewhere
+            console.log(response.body)
             navigate()
         }
         else{
@@ -34,16 +39,20 @@ function LeadForm(){
         let lastName = e.target.last_name.value
         let phone = e.target.phone.value
         let email = e.target.email.value
+        let zipCode = e.target.zip_code.value
         if( phone.length < 10 && phone.length > 10 ){
             let responseToSheets = await fetch("", {
+                "lp_campaign_id": "",
+                "lp_campaign_key": "",
                 "first_name": firstName,
                 "last_name": lastName,
                 "phone": phone,
-                "email": email
+                "email": email,
+                "zip_code": zipCode,
             })
                 .then(output => output.json())
                 .catch(error => console.log(error))
-
+            console.log(responseToSheets.body)
             // navigate to somewhere
             navigate()
         }
@@ -65,7 +74,8 @@ function LeadForm(){
                 <input type="number" maxLength="10" name="phone" placholder="E:G 1234567892"/><br/>
                 <label htmlFor="">Email</label><br/>
                 <input type="email" name="email" placholder="Enter email.."/><br/>
-
+                <label htmlFor="">Zip Code</label><br/>
+                <input type="text" name="zip_code" placholder="Enter zip code.."/><br/>
                 <button className="">Save</button>
             </form>
         </>
