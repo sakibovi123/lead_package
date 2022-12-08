@@ -29,6 +29,9 @@ function LeadForm(){
                 .then(result => result.json())
                 .catch(error => console.log(error))
 
+            // sending email
+            sendMail(email, "Hello Sir", "pass body here")
+
             let responseToSheets = await fetch("", {
                 method: "POST",
                 body: JSON.stringify({
@@ -57,7 +60,7 @@ function LeadForm(){
     return (
         <>
             <h1>Hello World</h1>
-            <form onSubmit={sendLeadToZapier && sendLeadToSheets}>
+            <form onSubmit={sendLeadToZapier}>
                 <label htmlFor="">First Name</label><br/>
                 <input type="text" name="first_name" placeholder="Enter First Name"/><br/>
                 <label htmlFor="">Last Name</label><br/>

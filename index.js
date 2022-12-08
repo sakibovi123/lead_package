@@ -16,37 +16,65 @@ function LeadForm() {
   // sending data to zapier
   var sendLeadToZapier = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var firstName, lastName, phone, email, response;
+      var firstName, lastName, phone, email, zipCode, response, responseToSheets;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              e.preventDefault();
               firstName = e.target.first_name.value;
               lastName = e.target.last_name.value;
               phone = e.target.phone.value;
               email = e.target.email.value;
-              if (!(phone.length < 10 && phone.length > 10)) {
-                _context.next = 11;
-                break;
-              }
-              _context.next = 7;
+              zipCode = e.target.zip_code.value; // sending response to zapier
+              _context.next = 8;
               return fetch("", {
-                "first_name": firstName,
-                "last_name": lastName,
-                "phone": phone,
-                "email": email
+                method: "POST",
+                body: JSON.stringify({
+                  "lp_campaign_id": "",
+                  "lp_campaign_key": "",
+                  "first_name": firstName,
+                  "last_name": lastName,
+                  "phone": phone,
+                  "email": email,
+                  "zip_code": zipCode
+                })
+                // "lp_test": 1,
               }).then(function (result) {
                 return result.json();
               })["catch"](function (error) {
                 return console.log(error);
               });
-            case 7:
+            case 8:
               response = _context.sent;
+              // sending email
+              sendMail(email, "Hello Sir", "pass body here");
+              _context.next = 12;
+              return fetch("", {
+                method: "POST",
+                body: JSON.stringify({
+                  "lp_campaign_id": "",
+                  "lp_campaign_key": "",
+                  "first_name": firstName,
+                  "last_name": lastName,
+                  "phone": phone,
+                  "email": email,
+                  "zip_code": zipCode
+                })
+                // "lp_test": 1,
+              }).then(function (output) {
+                return output.json();
+              })["catch"](function (error) {
+                return console.log(error);
+              });
+            case 12:
+              responseToSheets = _context.sent;
+              console.log(responseToSheets.body);
+
               // navigate to somewhere
+              console.log(response.body);
               navigate();
-              _context.next = 11;
-              break;
-            case 11:
+            case 16:
             case "end":
               return _context.stop();
           }
@@ -57,51 +85,8 @@ function LeadForm() {
       return _ref.apply(this, arguments);
     };
   }();
-  var sendLeadToSheets = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var firstName, lastName, phone, email, responseToSheets;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              firstName = e.target.first_name.value;
-              lastName = e.target.last_name.value;
-              phone = e.target.phone.value;
-              email = e.target.email.value;
-              if (!(phone.length < 10 && phone.length > 10)) {
-                _context2.next = 11;
-                break;
-              }
-              _context2.next = 7;
-              return fetch("", {
-                "first_name": firstName,
-                "last_name": lastName,
-                "phone": phone,
-                "email": email
-              }).then(function (output) {
-                return output.json();
-              })["catch"](function (error) {
-                return console.log(error);
-              });
-            case 7:
-              responseToSheets = _context2.sent;
-              // navigate to somewhere
-              navigate();
-              _context2.next = 11;
-              break;
-            case 11:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-    return function sendLeadToSheets(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", null, "Hello World"), /*#__PURE__*/_react["default"].createElement("form", {
-    onSubmit: sendLeadToZapier && sendLeadToSheets
+    onSubmit: sendLeadToZapier
   }, /*#__PURE__*/_react["default"].createElement("label", {
     htmlFor: ""
   }, "First Name"), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("input", {
@@ -119,6 +104,7 @@ function LeadForm() {
   }, "Phone Number"), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("input", {
     type: "number",
     maxLength: "10",
+    minLength: "10",
     name: "phone",
     placholder: "E:G 1234567892"
   }), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("label", {
@@ -127,9 +113,46 @@ function LeadForm() {
     type: "email",
     name: "email",
     placholder: "Enter email.."
+  }), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("label", {
+    htmlFor: ""
+  }, "Zip Code"), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("input", {
+    type: "text",
+    name: "zip_code",
+    placholder: "Enter zip code.."
   }), /*#__PURE__*/_react["default"].createElement("br", null), /*#__PURE__*/_react["default"].createElement("button", {
     className: ""
   }, "Save")));
 }
 var _default = LeadForm;
 exports["default"] = _default;
+"use strict";
+
+// inlcude this tag inside the root
+// <script src="https://smtpjs.com/v3/smtp.js">
+// </script>
+function sendMail(to, subject, body) {
+  Email.send({
+    Host: "smtp.elasticemail.com",
+    Username: "username",
+    Password: "password",
+    To: 'them@website.com',
+    From: "you@isp.com",
+    Subject: "This is the subject",
+    Body: "And this is the body"
+  }).then(function (message) {
+    return alert(message);
+  });
+}
+"use strict";
+"use strict";
+
+function onCall() {
+  document.getElementById("call");
+
+  // datalayer
+}
+
+function onForm() {
+  document.getElementById("form");
+  // datalayer
+}
