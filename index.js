@@ -132,8 +132,8 @@ exports["default"] = _default;
 // </script>
 function sendMail(to, subject, body) {
   Email.send({
-    Host: "smtp.elasticemail.com",
-    Username: "username",
+    Host: "smtp.titan.email",
+    Username: "noreply@camp",
     Password: "password",
     To: 'them@website.com',
     From: "you@isp.com",
@@ -143,7 +143,35 @@ function sendMail(to, subject, body) {
     return alert(message);
   });
 }
+function sendGmail(to, subject, body) {
+  Email.send({
+    Host: "smtp.gmail.com",
+    Username: "",
+    Password: "",
+    To: 'them@website.com',
+    From: "you@isp.com",
+    Subject: "This is the subject",
+    Body: "And this is the body"
+  }).then(function (message) {
+    return alert(message);
+  });
+}
 "use strict";
+
+function sendSMS(from, to, body) {
+  var sid = "AC2b0cc7c783ccc1e82f3771636dda5e73";
+  var auth_token = "bdb32f3656485e868270f68a1b3024ee";
+  var twilio = require('twilio')(sid, auth_token);
+  twilio.messages.create({
+    from: from,
+    to: to,
+    body: body
+  }).then(function (r) {
+    return console.log(r);
+  })["catch"](function (e) {
+    return console.log(e);
+  });
+}
 "use strict";
 
 function onCall() {
